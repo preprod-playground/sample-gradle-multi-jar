@@ -1,5 +1,5 @@
 # sample-gradle-jar
-
+ 
 A minimal Gradle project that demonstrates a known issue with the `veracode package` command when applied to Gradle projects that copy 3rd-party dependency JARs alongside their first-party JAR.
 
 ## What this project does

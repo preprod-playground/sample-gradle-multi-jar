@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.example'
+version = '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.1'
+    implementation 'org.slf4j:slf4j-api:2.0.13'
+    runtimeOnly 'ch.qos.logback:logback-classic:1.5.6'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.3'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+// Produce a first-party JAR with the manifest Class-Path pointing to the deps directory
+jar {
+    manifest {
+        attributes(
+            'Main-Class': 'com.example.app.Main',
+            'Class-Path': configurations.runtimeClasspath.collect { "libs/${it.name}" }.join(' ')
+        )
+    }
+    // First-party code only — no fat-jar
+    from sourceSets.main.output
+}
+
+// Copy all runtime dependency JARs next to the first-party JAR
+tasks.register('copyDependencies', Copy) {
+    description = 'Copies all runtime dependency JARs into build/libs/libs/'
+    from configurations.runtimeClasspath
+    into layout.buildDirectory.dir('libs/libs')
+}
+
+// Wire copyDependencies into the standard lifecycle
+assemble.dependsOn copyDependencies
+
+test {
+    useJUnitPlatform()
+}

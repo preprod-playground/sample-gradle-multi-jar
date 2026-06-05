@@ -1,9 +1,9 @@
 # sample-gradle-jar
- 
+  
 A minimal Gradle project that demonstrates a known issue with the `veracode package` command when applied to Gradle projects that copy 3rd-party dependency JARs alongside their first-party JAR.
 
 ## What this project does
-
+ 
 The project builds a small Java application and uses two standard Gradle conventions:
 
 1. **First-party JAR** — the `jar` task compiles only the project's own source code into `build/libs/<project-name>.jar`. The JAR manifest `Class-Path` attribute lists the dependency JARs so the JVM can find them at runtime without bundling everything into a fat JAR.
